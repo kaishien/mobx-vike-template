@@ -5,6 +5,6 @@ export { GlobalModelProvider } from "./global-model-provider";
 export { InjectionKeys } from "./injection-keys";
 export { useSnapshot } from "./snapshot-context";
 export type { RootStoreSnapshot } from "./snapshot";
-export { SSRContainerWrapper, useRequestId } from "./SSRContainerWrapper";
+export { SSRContainerWrapper, useRequestId } from "./ssr-container-wrapper";
 export { createSSRPageData } from "./ssr-data-helper";
 export type { SSRPageData } from "./ssr-data-helper";

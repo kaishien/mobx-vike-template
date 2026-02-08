@@ -4,7 +4,7 @@ import { resolveToken } from "../di";
 import { createRequestContainer } from "./create-request-container";
 import { InjectionKeys } from "./injection-keys";
 import type { RootStoreSnapshot } from "./snapshot";
-import { serializeUser } from "../stores/UserStore";
+import { serializeUserModel } from "../models/user-model";
 
 export type SSRPageData = {
   requestId: string;
@@ -16,10 +16,10 @@ export type SSRPageData = {
  * Their snapshots are merged into the root snapshot automatically.
  */
 async function setupGlobalStores(container: DependencyContainer): Promise<Partial<RootStoreSnapshot>> {
-  const userStore = resolveToken(container, InjectionKeys.UserStore);
-  await userStore.fetchCurrentUser();
+  const userModel = resolveToken(container, InjectionKeys.UserModel);
+  await userModel.fetchCurrentUser();
 
-  return { user: serializeUser(userStore) };
+  return { user: serializeUserModel(userModel) };
 }
 
 export async function createSSRPageData(

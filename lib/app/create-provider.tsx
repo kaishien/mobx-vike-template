@@ -12,17 +12,15 @@ type ClientOptions<T> = {
   token: TypedToken<T>;
 };
 
-type UseStore<T> = (init?: (store: T) => (() => void) | undefined) => T;
+type UseModel<T> = (init?: (store: T) => (() => void) | undefined) => T;
 
-/** With SSR serialization — returns `serialize` alongside `Provider` and `useStore`. */
 export function createProvider<T, K extends keyof T>(
   options: SSROptions<T, K>,
-): { Provider: React.FC<PropsWithChildren>; useStore: UseStore<T>; serialize: (store: T) => Pick<T, K> };
+): { Provider: React.FC<PropsWithChildren>; useModel: UseModel<T>; serialize: (store: T) => Pick<T, K> };
 
-/** Client-only — no serialization needed. */
 export function createProvider<T>(
   options: ClientOptions<T>,
-): { Provider: React.FC<PropsWithChildren>; useStore: UseStore<T> };
+): { Provider: React.FC<PropsWithChildren>; useModel: UseModel<T> };
 
 export function createProvider<T, K extends keyof T>({
   token,
@@ -64,7 +62,7 @@ export function createProvider<T, K extends keyof T>({
    * Optionally accepts an `init` callback that runs **once** after mount.
    * The callback receives the store instance and may return a cleanup function.
    */
-  function useStore(init?: (store: T) => (() => void) | undefined): T {
+  function useModel(init?: (store: T) => (() => void) | undefined): T {
     const store = useContext(StoreContext);
 
     if (!store) {
@@ -81,17 +79,17 @@ export function createProvider<T, K extends keyof T>({
     return store;
   }
 
-  if (snapshotKeys) {
-    const keys = snapshotKeys;
-    function serialize(store: T): Snapshot {
-      const snapshot = {} as Snapshot;
-      for (const key of keys) {
-        snapshot[key] = store[key];
+    if (snapshotKeys) {
+      const keys = snapshotKeys;
+      function serialize(store: T): Snapshot {
+        const snapshot = {} as Snapshot;
+        for (const key of keys) {
+          snapshot[key] = store[key];
+        }
+        return snapshot;
       }
-      return snapshot;
-    }
-    return { Provider, useStore, serialize };
+    return { Provider, useModel, serialize };
   }
 
-  return { Provider, useStore };
+  return { Provider, useModel };
 }

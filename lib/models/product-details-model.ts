@@ -6,7 +6,7 @@ import type { DummyJsonApi } from "../services/DummyJsonApi";
 import type { ProductDetails } from "../types/dummyjson";
 
 @injectable()
-export class ProductDetailsStore {
+export class ProductDetailsModel {
   product: ProductDetails | null = null;
   isLoading = false;
   isLoaded = false;
@@ -45,11 +45,11 @@ export class ProductDetailsStore {
 }
 
 export const {
-  Provider: ProductDetailsProvider,
-  useStore: useProductDetailsStore,
-  serialize: serializeProductDetails,
+  Provider: ProductDetailsModelProvider,
+  useModel: useProductDetailsModel,
+  serialize: serializeProductDetailsModel,
 } = createProvider({
-  token: InjectionKeys.ProductDetailsStore,
-  snapshotKey: "productDetails",
+  token: InjectionKeys.ProductDetailsModel,
+  snapshotKey: "productDetailsSnapshot",
   snapshotProperties: ["product", "isLoaded", "productId"] as const,
 });

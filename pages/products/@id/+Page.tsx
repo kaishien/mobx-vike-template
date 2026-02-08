@@ -1,10 +1,10 @@
 import { Alert, Badge, Button, Card, Group, Image, List, Stack, Text, Title } from "@mantine/core";
 import { observer } from "mobx-react-lite";
 import { useRequestId } from "../../../lib/app";
-import { ProductDetailsProvider, useProductDetailsStore } from "../../../lib/stores/ProductDetailsStore";
+import { ProductDetailsModelProvider, useProductDetailsModel } from "../../../lib/models/product-details-model";
 
 function ProductDetailsPage() {
-  const store = useProductDetailsStore();
+  const store = useProductDetailsModel();
   const requestId = useRequestId();
   const product = store.product;
 
@@ -53,8 +53,8 @@ const ObserverPage = observer(ProductDetailsPage);
 
 export default function Page() {
   return (
-    <ProductDetailsProvider>
+    <ProductDetailsModelProvider>
       <ObserverPage />
-    </ProductDetailsProvider>
+    </ProductDetailsModelProvider>
   );
 }

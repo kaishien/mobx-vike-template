@@ -1,6 +1,6 @@
 import { composeProviders } from "../di";
-import { UserProvider } from "../stores/UserStore";
+import { UserModelProvider } from "../models/user-model";
 
 export const GlobalModelProvider = composeProviders([
-  UserProvider,
+  UserModelProvider,
 ]);

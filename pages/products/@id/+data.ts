@@ -2,7 +2,7 @@ import { useConfig } from "vike-react/useConfig";
 import type { PageContextServer } from "vike/types";
 import { resolveToken } from "../../../lib/di";
 import { createSSRPageData, InjectionKeys } from "../../../lib/app";
-import { serializeProductDetails } from "../../../lib/stores/ProductDetailsStore";
+import { serializeProductDetailsModel } from "../../../lib/models/product-details-model";
 
 export type Data = Awaited<ReturnType<typeof data>>;
 
@@ -15,7 +15,7 @@ export async function data(pageContext: PageContextServer) {
   }
 
   return createSSRPageData(pageContext, async (container) => {
-    const store = resolveToken(container, InjectionKeys.ProductDetailsStore);
+    const store = resolveToken(container, InjectionKeys.ProductDetailsModel);
     await store.fetchProductById(id);
 
     if (!store.product) {
@@ -24,6 +24,6 @@ export async function data(pageContext: PageContextServer) {
 
     config({ title: `${store.product.title} | Product details` });
 
-    return { productDetails: serializeProductDetails(store) };
+    return { productDetailsSnapshot: serializeProductDetailsModel(store) };
   });
 }

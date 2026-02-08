@@ -13,12 +13,12 @@ export type User = {
 };
 
 @injectable()
-export class UserStore {
+export class UserModel {
   user: User | null = null;
   isAuthenticated = false;
   isLoading = false;
   error: string | null = null;
-
+  
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
   }
@@ -54,11 +54,11 @@ export class UserStore {
 }
 
 export const {
-  Provider: UserProvider,
-  useStore: useUser,
-  serialize: serializeUser,
+  Provider: UserModelProvider,
+  useModel: useUserModel,
+  serialize: serializeUserModel,
 } = createProvider({
-  token: InjectionKeys.UserStore,
+  token: InjectionKeys.UserModel,
   snapshotKey: "user",
   snapshotProperties: ["user", "isAuthenticated"] as const,
 });

@@ -29,11 +29,6 @@ export function resolveToken<T>(container: DependencyContainer, token: TypedToke
 /**
  * Resolves a dependency from the request-scoped DI container.
  * The return type is inferred from the token — no manual generic needed.
- *
- * @example
- * ```ts
- * const store = useInjection(InjectionKeys.ProductsStore); // type: ProductsStore
- * ```
  */
 export function useInjection<T>(token: TypedToken<T>): T {
   const container = useContainer();

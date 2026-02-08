@@ -5,9 +5,9 @@ import {
   rootContainer,
 } from "../di";
 import { DummyJsonApi } from "../services/DummyJsonApi";
-import { ProductDetailsStore } from "../stores/ProductDetailsStore";
-import { ProductsStore } from "../stores/ProductsStore";
-import { UserStore } from "../stores/UserStore";
+import { ProductDetailsModel } from "../models/product-details-model";
+import { ProductsModel } from "../models/products-model";
+import { UserModel } from "../models/user-model";
 import { InjectionKeys } from "./injection-keys";
 
 rootContainer.register(
@@ -17,20 +17,20 @@ rootContainer.register(
 );
 
 rootContainer.register(
-  InjectionKeys.UserStore,
-  { useClass: UserStore },
-  { lifecycle: Lifecycle.Singleton },
-);
-
-rootContainer.register(
-  InjectionKeys.ProductsStore,
-  { useClass: ProductsStore },
+  InjectionKeys.UserModel,
+  { useClass: UserModel },
   { lifecycle: Lifecycle.ContainerScoped },
 );
 
 rootContainer.register(
-  InjectionKeys.ProductDetailsStore,
-  { useClass: ProductDetailsStore },
+  InjectionKeys.ProductsModel,
+  { useClass: ProductsModel },
+  { lifecycle: Lifecycle.ContainerScoped },
+);
+
+rootContainer.register(
+  InjectionKeys.ProductDetailsModel,
+  { useClass: ProductDetailsModel },
   { lifecycle: Lifecycle.ContainerScoped },
 );
 

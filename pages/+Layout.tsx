@@ -8,7 +8,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { observer } from "mobx-react-lite";
 import { Link } from "../components/Link";
 import { GlobalModelProvider } from "../lib/app";
-import { useUser } from "../lib/stores/UserStore";
+import { useUserModel } from "../lib/models/user-model";
 
 const theme: MantineThemeOverride = createTheme({
   /** Put your mantine theme override here */
@@ -16,9 +16,8 @@ const theme: MantineThemeOverride = createTheme({
 });
 
 const AppHeader = observer(function AppHeader({ opened, toggle }: { opened: boolean; toggle: () => void }) {
-  const user = useUser();
+  const user = useUserModel();
 
-  console.log("user", user)
   return (
     <AppShell.Header>
       <Group h="100%" px="md" justify="space-between">

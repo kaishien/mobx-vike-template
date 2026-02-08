@@ -2,6 +2,7 @@ import { useConfig } from "vike-react/useConfig";
 import type { PageContextServer } from "vike/types";
 import { resolveToken } from "../../lib/di";
 import { createSSRPageData, InjectionKeys } from "../../lib/app";
+import { serializeProducts } from "../../lib/stores/ProductsStore";
 
 export type Data = Awaited<ReturnType<typeof data>>;
 
@@ -14,6 +15,6 @@ export async function data(pageContext: PageContextServer) {
 
     config({ title: `Products (${store.products.length})` });
 
-    return { products: store.serialize() };
+    return { products: serializeProducts(store) };
   });
 }

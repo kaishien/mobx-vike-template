@@ -1,25 +1,12 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { inject, injectable } from "../di";
+import { createProvider } from "../app/create-provider";
 import { InjectionKeys } from "../app/injection-keys";
 import type { DummyJsonApi } from "../services/DummyJsonApi";
 import type { ProductDetails } from "../types/dummyjson";
-import { serializableStore, snapshotKeys, type SerializableStore } from "./SerializableStore";
 
-export type ProductDetailsStoreSnapshot = {
-  product: ProductDetails | null;
-  isLoaded: boolean;
-  productId: number | null;
-};
-
-const SNAPSHOT_KEYS = snapshotKeys<ProductDetailsStoreSnapshot>({
-  product: true,
-  isLoaded: true,
-  productId: true,
-});
-
-@serializableStore<ProductDetailsStoreSnapshot>(SNAPSHOT_KEYS)
 @injectable()
-export class ProductDetailsStore implements SerializableStore<ProductDetailsStoreSnapshot> {
+export class ProductDetailsStore {
   product: ProductDetails | null = null;
   isLoading = false;
   isLoaded = false;
@@ -28,6 +15,10 @@ export class ProductDetailsStore implements SerializableStore<ProductDetailsStor
 
   constructor(@inject(InjectionKeys.DummyJsonApi) private readonly api: DummyJsonApi) {
     makeAutoObservable(this, {}, { autoBind: true });
+  }
+
+  get productName() {
+    return this.product?.title;
   }
 
   async fetchProductById(productId: number) {
@@ -51,7 +42,14 @@ export class ProductDetailsStore implements SerializableStore<ProductDetailsStor
       });
     }
   }
-
-  declare serialize: () => ProductDetailsStoreSnapshot;
-  declare restore: (snapshot?: ProductDetailsStoreSnapshot) => void;
 }
+
+export const {
+  Provider: ProductDetailsProvider,
+  useStore: useProductDetailsStore,
+  serialize: serializeProductDetails,
+} = createProvider({
+  token: InjectionKeys.ProductDetailsStore,
+  snapshotKey: "productDetails",
+  snapshotProperties: ["product", "isLoaded", "productId"] as const,
+});

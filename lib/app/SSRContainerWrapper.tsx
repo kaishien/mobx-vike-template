@@ -3,6 +3,7 @@ import { usePageContext } from "vike-react/usePageContext";
 import { type DependencyContainer, DIProvider, useInjection } from "../di";
 import { createRequestContainer, type CreateRequestContainerParams } from "./create-request-container";
 import { InjectionKeys } from "./injection-keys";
+import { SnapshotContext } from "./snapshot-context";
 import type { SSRPageData } from "./ssr-data-helper";
 
 function isSSRPageData(data: unknown): data is SSRPageData {
@@ -18,7 +19,7 @@ function isSSRPageData(data: unknown): data is SSRPageData {
 function useRequestContainer(params: CreateRequestContainerParams) {
   const containerRef = useRef<DependencyContainer | null>(null);
   const identityRef = useRef<string>("");
-  const nextIdentity = `${params.requestId ?? ""}|${params.url ?? ""}`;
+  const nextIdentity = params.requestId ?? "";
 
   if (!containerRef.current || identityRef.current !== nextIdentity) {
     containerRef.current?.dispose();
@@ -40,10 +41,13 @@ function useRequestContainer(params: CreateRequestContainerParams) {
 function SSRContainerInner({ data, children }: PropsWithChildren<{ data: SSRPageData }>) {
   const container = useRequestContainer({
     requestId: data.requestId,
-    snapshot: data.snapshot,
   });
 
-  return <DIProvider container={container}>{children}</DIProvider>;
+  return (
+    <DIProvider container={container}>
+      <SnapshotContext.Provider value={data.snapshot}>{children}</SnapshotContext.Provider>
+    </DIProvider>
+  );
 }
 
 export function SSRContainerWrapper({ children }: PropsWithChildren) {

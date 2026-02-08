@@ -1,12 +1,13 @@
 import { Alert, Badge, Button, Card, Group, Image, List, Stack, Text, Title } from "@mantine/core";
 import { observer } from "mobx-react-lite";
-import { useInjection } from "../../../lib/di";
-import { InjectionKeys, useRequestId } from "../../../lib/app";
+import { useRequestId } from "../../../lib/app";
+import { ProductDetailsProvider, useProductDetailsStore } from "../../../lib/stores/ProductDetailsStore";
 
-export default observer(function Page() {
-  const store = useInjection(InjectionKeys.ProductDetailsStore);
+function ProductDetailsPage() {
+  const store = useProductDetailsStore();
   const requestId = useRequestId();
   const product = store.product;
+
 
   if (store.error) {
     return <Alert color="red">{store.error}</Alert>;
@@ -46,4 +47,14 @@ export default observer(function Page() {
       </Button>
     </Stack>
   );
-});
+}
+
+const ObserverPage = observer(ProductDetailsPage);
+
+export default function Page() {
+  return (
+    <ProductDetailsProvider>
+      <ObserverPage />
+    </ProductDetailsProvider>
+  );
+}

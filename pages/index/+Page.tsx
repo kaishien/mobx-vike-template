@@ -1,10 +1,10 @@
 import { Alert, Badge, Button, Card, Group, Image, SimpleGrid, Stack, Text, Title } from "@mantine/core";
 import { observer } from "mobx-react-lite";
-import { InjectionKeys, useRequestId } from "../../lib/app";
-import { useInjection } from "../../lib/di";
+import { useRequestId } from "../../lib/app";
+import { ProductsProvider, useProductsStore } from "../../lib/stores/ProductsStore";
 
-export default observer(function Page() {
-  const store = useInjection(InjectionKeys.ProductsStore);
+function ProductsPage() {
+  const store = useProductsStore();
   const requestId = useRequestId();
 
   return (
@@ -47,4 +47,14 @@ export default observer(function Page() {
       </SimpleGrid>
     </Stack>
   );
-});
+}
+
+const ObserverPage = observer(ProductsPage);
+
+export default function Page() {
+  return (
+    <ProductsProvider>
+      <ObserverPage />
+    </ProductsProvider>
+  );
+}

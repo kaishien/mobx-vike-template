@@ -1,25 +1,12 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { inject, injectable } from "../di";
+import { createProvider } from "../app/create-provider";
 import { InjectionKeys } from "../app/injection-keys";
 import type { DummyJsonApi } from "../services/DummyJsonApi";
 import type { ProductPreview } from "../types/dummyjson";
-import { serializableStore, snapshotKeys, type SerializableStore } from "./SerializableStore";
 
-export type ProductsStoreSnapshot = {
-  products: ProductPreview[];
-  isLoaded: boolean;
-  lastLoadedAt: string | null;
-};
-
-const SNAPSHOT_KEYS = snapshotKeys<ProductsStoreSnapshot>({
-  products: true,
-  isLoaded: true,
-  lastLoadedAt: true,
-});
-
-@serializableStore<ProductsStoreSnapshot>(SNAPSHOT_KEYS)
 @injectable()
-export class ProductsStore implements SerializableStore<ProductsStoreSnapshot> {
+export class ProductsStore {
   products: ProductPreview[] = [];
   isLoading = false;
   isLoaded = false;
@@ -58,7 +45,14 @@ export class ProductsStore implements SerializableStore<ProductsStoreSnapshot> {
       });
     }
   }
-
-  declare serialize: () => ProductsStoreSnapshot;
-  declare restore: (snapshot?: ProductsStoreSnapshot) => void;
 }
+
+export const {
+  Provider: ProductsProvider,
+  useStore: useProductsStore,
+  serialize: serializeProducts,
+} = createProvider({
+  token: InjectionKeys.ProductsStore,
+  snapshotKey: "products",
+  snapshotProperties: ["products", "isLoaded", "lastLoadedAt"] as const,
+});

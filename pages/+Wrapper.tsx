@@ -1,1 +1,1 @@
-export { SSRContainerWrapper as default } from "../lib/app";
+export { SSRContainerWrapper as default } from "../app";

@@ -1,6 +1,6 @@
 import { createContext, type PropsWithChildren, useContext, useEffect, useMemo, useRef } from "react";
-import { resolveToken, useContainer, type TypedToken } from "../di";
-import { useSnapshot } from "./snapshot-context";
+import { resolveToken, useContainer, type TypedToken } from "../../lib/di";
+import { useSnapshot } from "../ssr/snapshot-context";
 
 type SSROptions<T, K extends keyof T> = {
   token: TypedToken<T>;

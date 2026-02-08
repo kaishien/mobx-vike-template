@@ -1,9 +1,9 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { inject, injectable } from "../di";
-import { createProvider } from "../app/create-provider";
-import { InjectionKeys } from "../app/injection-keys";
-import type { DummyJsonApi } from "../services/DummyJsonApi";
-import type { ProductDetails } from "../types/dummyjson";
+import { inject, injectable } from "../../lib/di";
+import { createProvider } from "../providers/create-provider";
+import { InjectionKeys } from "../../config/di/injection-keys";
+import type { DummyJsonApi } from "../../lib/services/DummyJsonApi";
+import type { ProductDetails } from "../../lib/types/dummyjson";
 
 @injectable()
 export class ProductDetailsModel {

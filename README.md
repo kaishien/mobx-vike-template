@@ -4,7 +4,7 @@ SSR template with request-scoped DI container and MobX stores.
 
 ## Stack
 
-- Vike + Vike React + Vike Photon (Fastify server)
+- Vike + Vike React + Fastify
 - MobX + mobx-react-lite
 - tsyringe for DI
 - TypeScript
@@ -18,32 +18,13 @@ Each SSR request creates a fresh DI container:
 - stores serialize themselves in `+data.ts`
 - client rehydrates stores from snapshots
 
-## DI approach (inspired by Artivio frontend)
+## DI approach
 
 - `InjectionKeys` as a single source of truth for tokens
 - centralized `registerRequestDependencies()` split by layers (infrastructure/stores)
 - `@injectable()` + `@inject(...)` for explicit constructor dependencies
 - `DIProvider` + `useInjection()` hooks for React components
 - request-level child container with explicit `dispose()` on unmount
-
-## Routes
-
-- `/` products list (`https://dummyjson.com/products`)
-- `/products/:id` product details (`https://dummyjson.com/products/:id`)
-
-## Project structure
-
-- `lib/di/createRequestContainer.ts` request container factory
-- `lib/di/dependency-register.ts` centralized dependency registration
-- `lib/di/injection-keys.ts` typed DI keys
-- `lib/di/di-provider.tsx` React DI provider/hooks
-- `lib/services/DummyJsonApi.ts` HTTP client for DummyJSON
-- `lib/stores/ProductsStore.ts` list store + serialization
-- `lib/stores/ProductDetailsStore.ts` details store + serialization
-- `pages/index/+data.ts` SSR fetch through MobX store
-- `pages/index/+Page.tsx` hydrate + render list
-- `pages/products/@id/+data.ts` SSR fetch by id through MobX store
-- `pages/products/@id/+Page.tsx` hydrate + render details
 
 ## Run
 
@@ -52,14 +33,73 @@ pnpm install
 pnpm dev
 ```
 
-Open:
+## Example Usage
 
-- `http://localhost:3000/`
-- `http://localhost:3000/products/1`
+```ts
+// products-model.ts
+@injectable()
+export class ProductsModel {
+  products: ProductPreview[] = [];
+  isLoading = false;
 
-## Verification checklist
+  constructor(@inject(InjectionKeys.DummyJsonApi) private api: DummyJsonApi) {
+    makeAutoObservable(this, {}, { autoBind: true });
+  }
 
-1. Open the app in two different browsers/incognito windows.
-2. Hard refresh both pages.
-3. `request` badge should differ per page render, showing request-level scope.
-4. Client-side `Refetch on client` works via MobX action.
+  async fetchProducts(limit = 12) {
+    this.isLoading = true;
+    const products = await this.api.getProducts(limit);
+    runInAction(() => {
+      this.products = products;
+      this.isLoading = false;
+    });
+  }
+}
+
+export const {
+  Provider: ProductsModelProvider,
+  useModel: useProductsModel,
+  serialize: serializeProducts,
+} = createProvider({
+  token: InjectionKeys.ProductsModel,
+  snapshotKey: "products",
+  snapshotProperties: ["products"] as const,
+});
+```
+
+```ts
+// +data.ts
+export async function data(pageContext: PageContextServer) {
+  return createSSRPageData(pageContext, async (container) => {
+    const model = resolveToken(container, InjectionKeys.ProductsModel);
+    await model.fetchProducts(12);
+
+    return {
+      products: serializeProducts(model),
+    };
+  });
+}
+```
+
+```tsx
+// pages/index/+Page.tsx
+function ProductsPage() {
+  const model = useProductsModel();
+
+  return (
+    <>
+      {model.products.map((p) => (
+        <div key={p.id}>{p.title}</div>
+      ))}
+    </>
+  );
+}
+
+export default function Page() {
+  return (
+    <ProductsModelProvider>
+      <ProductsPage />
+    </ProductsModelProvider>
+  );
+}
+```

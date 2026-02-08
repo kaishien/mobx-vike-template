@@ -1,5 +1,5 @@
 import { inject, injectable, type RequestContext } from "../di";
-import { InjectionKeys } from "../app/injection-keys";
+import { InjectionKeys } from "../../config/di/injection-keys";
 import type { ProductDetails, ProductsResponse } from "../types/dummyjson";
 
 @injectable()

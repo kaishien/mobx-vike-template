@@ -1,8 +1,8 @@
 import { useConfig } from "vike-react/useConfig";
 import type { PageContextServer } from "vike/types";
 import { resolveToken } from "../../lib/di";
-import { createSSRPageData, InjectionKeys } from "../../lib/app";
-import { serializeProducts } from "../../lib/models/products-model";
+import { createSSRPageData, InjectionKeys } from "../../app";
+import { serializeProducts } from "../../app/models/products-model";
 
 export type Data = Awaited<ReturnType<typeof data>>;
 

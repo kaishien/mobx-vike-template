@@ -1,10 +1,10 @@
 import { type PropsWithChildren, useRef } from "react";
 import { usePageContext } from "vike-react/usePageContext";
-import { type DependencyContainer, DIProvider, resolveToken, useInjection } from "../di";
-import { createRequestContainer, type CreateRequestContainerParams } from "./create-request-container";
-import { InjectionKeys } from "./injection-keys";
+import { type DependencyContainer, DIProvider, resolveToken, useInjection } from "../../lib/di";
+import { createRequestContainer, type CreateRequestContainerParams } from "../../config/di/create-request-container";
+import { InjectionKeys } from "../../config/di/injection-keys";
 import { SnapshotContext } from "./snapshot-context";
-import type { SSRPageData } from "./ssr-data-helper";
+import type { SSRPageData } from "./create-page-data";
 
 let clientContainer: DependencyContainer | null = null;
 

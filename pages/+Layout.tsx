@@ -7,8 +7,8 @@ import { AppShell, Avatar, Burger, createTheme, Group, Image, MantineProvider, T
 import { useDisclosure } from "@mantine/hooks";
 import { observer } from "mobx-react-lite";
 import { Link } from "../components/Link";
-import { GlobalModelProvider } from "../lib/app";
-import { useUserModel } from "../lib/models/user-model";
+import { GlobalModelProvider } from "../app";
+import { useUserModel } from "../app/models/user-model";
 
 const theme: MantineThemeOverride = createTheme({
   /** Put your mantine theme override here */

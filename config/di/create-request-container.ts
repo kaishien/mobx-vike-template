@@ -1,4 +1,4 @@
-import { type DependencyContainer, rootContainer } from "../di";
+import { type DependencyContainer, rootContainer } from "../../lib/di";
 import { registerRequestContext } from "./register";
 
 export type CreateRequestContainerParams = {

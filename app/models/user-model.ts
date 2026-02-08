@@ -1,7 +1,8 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { injectable } from "../di";
-import { createProvider } from "../app/create-provider";
-import { InjectionKeys } from "../app/injection-keys";
+import type { DependencyContainer } from "../../lib/di";
+import { injectable, resolveToken } from "../../lib/di";
+import { createProvider } from "../providers/create-provider";
+import { InjectionKeys } from "../../config/di/injection-keys";
 
 export type User = {
   id: number;
@@ -62,3 +63,9 @@ export const {
   snapshotKey: "user",
   snapshotProperties: ["user", "isAuthenticated"] as const,
 });
+
+export async function loadUserSession(container: DependencyContainer) {
+  const userModel = resolveToken(container, InjectionKeys.UserModel);
+  await userModel.fetchCurrentUser();
+  return { user: serializeUserModel(userModel) };
+}

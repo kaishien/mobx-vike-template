@@ -1,7 +1,7 @@
 import { Alert, Badge, Button, Card, Group, Image, SimpleGrid, Stack, Text, Title } from "@mantine/core";
 import { observer } from "mobx-react-lite";
-import { useRequestId } from "../../lib/app";
-import { ProductsModelProvider, useProductsModel } from "../../lib/models/products-model";
+import { useRequestId } from "../../app";
+import { ProductsModelProvider, useProductsModel } from "../../app/models/products-model";
 
 function ProductsPage() {
   const store = useProductsModel();

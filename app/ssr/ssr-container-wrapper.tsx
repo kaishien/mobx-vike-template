@@ -5,6 +5,7 @@ import { createRequestContainer, type CreateRequestContainerParams } from "../..
 import { InjectionKeys } from "../../config/di/injection-keys";
 import { SnapshotContext } from "./snapshot-context";
 import type { SSRPageData } from "./create-page-data";
+import type { RootStoreSnapshot } from "./snapshot";
 
 let clientContainer: DependencyContainer | null = null;
 
@@ -46,6 +47,9 @@ export function SSRContainerWrapper({ children }: PropsWithChildren) {
   const pageData = pageContext.data as unknown;
   
   const data = isSSRPageData(pageData) ? pageData : undefined;
+  const snapshot: RootStoreSnapshot | undefined = pageContext.user
+    ? { ...(data?.snapshot ?? {}), user: pageContext.user }
+    : data?.snapshot;
 
   const container = useRequestContainer({
     requestId: data?.requestId,
@@ -54,7 +58,7 @@ export function SSRContainerWrapper({ children }: PropsWithChildren) {
 
   return (
     <DIProvider container={container}>
-      <SnapshotContext.Provider value={data?.snapshot}>{children}</SnapshotContext.Provider>
+      <SnapshotContext.Provider value={snapshot}>{children}</SnapshotContext.Provider>
     </DIProvider>
   );
 }

@@ -5,8 +5,7 @@ import {
   rootContainer,
 } from "../../lib/di";
 import { DummyJsonApi } from "../../lib/services/DummyJsonApi";
-import { ProductDetailsModel } from "../../app/models/product-details-model";
-import { ProductsModel } from "../../app/models/products-model";
+import { PostsModel } from "../../app/models/posts-model";
 import { UserModel } from "../../app/models/user-model";
 import { InjectionKeys } from "./injection-keys";
 
@@ -23,14 +22,8 @@ rootContainer.register(
 );
 
 rootContainer.register(
-  InjectionKeys.ProductsModel,
-  { useClass: ProductsModel },
-  { lifecycle: Lifecycle.ContainerScoped },
-);
-
-rootContainer.register(
-  InjectionKeys.ProductDetailsModel,
-  { useClass: ProductDetailsModel },
+  InjectionKeys.PostsModel,
+  { useClass: PostsModel },
   { lifecycle: Lifecycle.ContainerScoped },
 );
 

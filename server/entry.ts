@@ -1,4 +1,4 @@
-import { createTodoHandler } from "./create-todo-handler";
+import { loginHandler, logoutHandler } from "./auth-handlers";
 import { apply, serve } from "@photonjs/fastify";
 import fastify from "fastify";
 import rawBody from "fastify-raw-body";
@@ -16,7 +16,7 @@ async function startApp() {
   // /!\ Mandatory if you need to access the request body in any Universal Middleware or Handler
   await app.register(rawBody);
 
-  await apply(app, [createTodoHandler]);
+  await apply(app, [loginHandler, logoutHandler]);
 
   return serve(app, {
     port,

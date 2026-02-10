@@ -7,8 +7,9 @@ import vikeReact from "vike-react/config";
 
 export default {
   // https://vike.dev/head-tags
-  title: "Vike + MobX + tsyringe SSR template",
-  description: "Request-scoped DI container with store serialization",
+  title: "Posts",
+  description: "Vike + MobX + tsyringe SSR template",
+  passToClient: ["user"],
 
   extends: [vikeReact, vikePhoton],
 

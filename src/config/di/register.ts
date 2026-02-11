@@ -3,11 +3,11 @@ import {
   Lifecycle,
   type RequestContext,
   rootContainer,
-} from "../../lib/di";
-import { DummyJsonApi } from "../../lib/services/DummyJsonApi";
-import { PostsModel } from "../../app/models/posts-model";
-import { UserModel } from "../../app/models/user-model";
-import { InjectionKeys } from "./injection-keys";
+} from "~/lib/di";
+import { DummyJsonApi } from "~/lib/services/DummyJsonApi";
+import { PostsModel } from "../../../pages/index/(modules)/posts-model";
+import { UserModel } from "~/entity/user-model";
+import { InjectionKeys } from "~/config/di/injection-keys";
 
 rootContainer.register(
   InjectionKeys.DummyJsonApi,

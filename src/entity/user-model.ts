@@ -1,9 +1,10 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { inject, injectable } from "../../lib/di";
-import { createProvider } from "../providers/create-provider";
-import { InjectionKeys } from "../../config/di/injection-keys";
-import type { DummyJsonApi } from "../../lib/services/DummyJsonApi";
-import type { User } from "../../lib/types/dummyjson";
+import { inject, injectable } from "~/lib/di";
+import { createProvider } from "~/application/providers/create-provider";
+import { SnapshotKeys } from "~/application/ssr/snapshot";
+import { InjectionKeys } from "~/config/di/injection-keys";
+import type { DummyJsonApi } from "~/lib/services/DummyJsonApi";
+import type { User } from "~/lib/types/dummyjson";
 
 export type { User };
 
@@ -59,6 +60,6 @@ export const {
   serialize: serializeUserModel,
 } = createProvider({
   token: InjectionKeys.UserModel,
-  snapshotKey: "user",
+  snapshotKey: SnapshotKeys.UserModel,
   snapshotProperties: ["user", "isAuthenticated"] as const,
 });

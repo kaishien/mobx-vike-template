@@ -11,9 +11,10 @@ import {
   Title,
 } from "@mantine/core";
 import { observer } from "mobx-react-lite";
-import { useRequestId } from "../../app";
-import { PostsModelProvider, usePostsModel } from "../../app/models/posts-model";
-import { useUserModel } from "../../app/models/user-model";
+import { useRequestId } from "~/application";
+import { useUserModel } from "~/entity/user-model";
+import type { Comment, Post } from "~/lib/types/dummyjson";
+import { PostsModelProvider, usePostsModel } from "./(modules)/posts-model";
 
 function PostsPage() {
   const store = usePostsModel();
@@ -29,7 +30,7 @@ function PostsPage() {
 
       {store.error && <Alert color="red">{store.error}</Alert>}
 
-      {store.posts.map((post) => {
+      {store.posts.map((post: Post) => {
         const comments = store.commentsByPostId[post.id] ?? [];
         const commentsLoading = !!store.commentsLoading[post.id];
 
@@ -50,7 +51,7 @@ function PostsPage() {
               </Group>
 
               <Group gap="xs">
-                {post.tags.map((tag) => (
+                {post.tags.map((tag: string) => (
                   <Badge key={tag} size="sm" variant="dot">
                     #{tag}
                   </Badge>
@@ -70,7 +71,10 @@ function PostsPage() {
 
               {comments.length > 0 && (
                 <Stack gap="xs">
-                  <Divider label={`Comments (${comments.length})`} labelPosition="left" />
+                  <Divider
+                    label={`Comments (${comments.length})`}
+                    labelPosition="left"
+                  />
 
                   <form
                     onSubmit={async (event) => {
@@ -96,7 +100,7 @@ function PostsPage() {
                     </Group>
                   </form>
 
-                  {comments.map((comment) => {
+                  {comments.map((comment: Comment) => {
                     const isLiked = store.likedCommentIds.has(comment.id);
                     return (
                       <Card key={comment.id} withBorder>
@@ -116,7 +120,9 @@ function PostsPage() {
                               size="compact-xs"
                               variant={isLiked ? "filled" : "light"}
                               color={isLiked ? "red" : "gray"}
-                              onClick={() => store.toggleCommentLike(post.id, comment.id)}
+                              onClick={() =>
+                                store.toggleCommentLike(post.id, comment.id)
+                              }
                             >
                               {isLiked ? "♥ Remove like" : "♡ Like"}
                             </Button>
@@ -124,7 +130,9 @@ function PostsPage() {
                               size="compact-xs"
                               color="red"
                               variant="light"
-                              onClick={() => store.deleteComment(post.id, comment.id)}
+                              onClick={() =>
+                                store.deleteComment(post.id, comment.id)
+                              }
                             >
                               Delete
                             </Button>

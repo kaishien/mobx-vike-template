@@ -1,6 +1,6 @@
 import { Avatar, Card, Group, Stack, Text, Title } from "@mantine/core";
 import { observer } from "mobx-react-lite";
-import { useUserModel } from "../../app/models/user-model";
+import { useUserModel } from "~/entity/user-model";
 
 function ProfilePage() {
   const user = useUserModel();

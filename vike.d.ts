@@ -1,9 +1,9 @@
-import type { UserModel } from "./app/models/user-model";
+import type { RootStoreSnapshot } from "./src/application/ssr/snapshot";
 
 declare global {
   namespace Vike {
     interface PageContext {
-      user?: Pick<UserModel, "user" | "isAuthenticated">;
+      snapshotOverrides?: RootStoreSnapshot;
     }
   }
 }

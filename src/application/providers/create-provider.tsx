@@ -1,15 +1,18 @@
 import { createContext, type PropsWithChildren, useContext, useEffect, useMemo, useRef } from "react";
-import { resolveToken, useContainer, type TypedToken } from "../../lib/di";
+import { resolveToken, useContainer, type TypedToken } from "~/lib/di";
+import type { SnapshotKey } from "../ssr/snapshot";
 import { useSnapshot } from "../ssr/snapshot-context";
 
 type SSROptions<T, K extends keyof T> = {
   token: TypedToken<T>;
-  snapshotKey: string;
+  snapshotKey: SnapshotKey;
   snapshotProperties: readonly K[];
 };
 
 type ClientOptions<T> = {
   token: TypedToken<T>;
+  snapshotKey?: undefined;
+  snapshotProperties?: undefined;
 };
 
 type UseModel<T> = (init?: (store: T) => (() => void) | undefined) => T;
@@ -28,7 +31,7 @@ export function createProvider<T, K extends keyof T>({
   snapshotProperties,
 }: {
   token: TypedToken<T>;
-  snapshotKey?: string;
+  snapshotKey?: SnapshotKey;
   snapshotProperties?: readonly K[];
   // biome-ignore lint/suspicious/noExplicitAny: overloads provide precise return types
 }): any {

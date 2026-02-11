@@ -9,7 +9,7 @@ export default {
   // https://vike.dev/head-tags
   title: "Posts",
   description: "Vike + MobX + tsyringe SSR template",
-  passToClient: ["user"],
+  passToClient: ["snapshotOverrides"],
 
   extends: [vikeReact, vikePhoton],
 

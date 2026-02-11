@@ -1,0 +1,148 @@
+.top-loading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.top-loading-bar::before {
+  content: "";
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--mantine-color-cyan-6, #0891b2);
+  transition: width 0.4s ease-out;
+}
+
+.top-loading-bar.active::before {
+  width: 75%;
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.top-loading-bar.done::before {
+  width: 100%;
+  transition: width 0.2s ease-out;
+}
+
+.top-loading-bar.done {
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+}
+
+.page-transition-content {
+  view-transition-name: main-content;
+}
+
+@keyframes view-transition-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes view-transition-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes view-transition-slide-out {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-12px);
+  }
+}
+
+@keyframes view-transition-slide-in {
+  from {
+    transform: translateX(12px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(main-content) {
+  animation: 0.2s ease-out both view-transition-fade-out,
+    0.2s ease-out both view-transition-slide-out;
+}
+
+::view-transition-new(main-content) {
+  animation: 0.2s ease-out both view-transition-fade-in,
+    0.2s ease-out both view-transition-slide-in;
+}
+
+
+@keyframes page-transition-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes page-transition-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+body.page-transition {
+  cursor: wait;
+  position: relative;
+}
+
+body.page-transition::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(2px);
+  animation: page-transition-fade-in 0.2s ease-out;
+}
+
+@media (prefers-color-scheme: dark) {
+  body.page-transition::before {
+    background: rgba(0, 0, 0, 0.4);
+  }
+}
+
+body.page-transition::after {
+  content: "";
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 9999;
+  width: 32px;
+  height: 32px;
+  margin: -16px 0 0 -16px;
+  border: 3px solid transparent;
+  border-top-color: var(--mantine-color-cyan-6, #0891b2);
+  border-radius: 50%;
+  animation: page-transition-spin 0.7s linear infinite;
+}
+
+body.page-transition .page-transition-content {
+  pointer-events: none;
+  opacity: 0.85;
+  transition: opacity 0.2s ease-out;
+}

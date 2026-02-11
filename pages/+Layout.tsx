@@ -1,4 +1,5 @@
 import "@mantine/core/styles.css";
+import "../assets/page-transition.css";
 import logoUrl from "../assets/logo.svg";
 import type { MantineThemeOverride } from "@mantine/core";
 import {
@@ -18,10 +19,12 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { observer } from "mobx-react-lite";
+import { useEffect } from "react";
 import { usePageContext } from "vike-react/usePageContext";
-import { GlobalModelProvider } from "../app";
-import { useUserModel } from "../app/models/user-model";
-import { Link } from "../components/Link";
+import { GlobalModelProvider } from "~/application/providers/global-model-provider";
+import { useUserModel } from "~/entity/user-model";
+import { initTopBarOnLinkClick } from "~/lib/view-transition-state";
+import { Link } from "~/components/Link";
 
 const theme: MantineThemeOverride = createTheme({
   primaryColor: "cyan",
@@ -33,7 +36,13 @@ const APP_NAV_LINKS = [
   { href: "/profile", label: "Профиль" },
 ] as const;
 
-const AppHeader = observer(function AppHeader({ opened, toggle }: { opened: boolean; toggle: () => void }) {
+const AppHeader = observer(function AppHeader({
+  opened,
+  toggle,
+}: {
+  opened: boolean;
+  toggle: () => void;
+}) {
   const user = useUserModel();
 
   return (
@@ -52,7 +61,12 @@ const AppHeader = observer(function AppHeader({ opened, toggle }: { opened: bool
         <Group gap="sm">
           {user.user && (
             <>
-              <Avatar src={user.user.image} alt={user.user.username} radius="xl" size="sm" />
+              <Avatar
+                src={user.user.image}
+                alt={user.user.username}
+                radius="xl"
+                size="sm"
+              />
               <Text size="sm" fw={500} visibleFrom="sm">
                 {user.user.firstName} {user.user.lastName}
               </Text>
@@ -74,7 +88,7 @@ function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <Container size={460} py={60}>
       <Paper withBorder radius="md" p="xl">
-        {children}
+        <div className="page-transition-content">{children}</div>
       </Paper>
     </Container>
   );
@@ -98,7 +112,9 @@ function AppLayout({ children }: { children: React.ReactNode }) {
           <Link key={item.href} href={item.href} label={item.label} />
         ))}
       </AppShell.Navbar>
-      <AppShell.Main>{children}</AppShell.Main>
+      <AppShell.Main>
+        <div className="page-transition-content">{children}</div>
+      </AppShell.Main>
     </AppShell>
   );
 }
@@ -107,9 +123,19 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { urlPathname } = usePageContext();
   const isLoginPage = urlPathname === "/login";
 
+  useEffect(() => {
+    initTopBarOnLinkClick();
+  }, []);
+
   return (
     <MantineProvider theme={theme}>
-      <GlobalModelProvider>{isLoginPage ? <AuthLayout>{children}</AuthLayout> : <AppLayout>{children}</AppLayout>}</GlobalModelProvider>
+      <GlobalModelProvider>
+        {isLoginPage ? (
+          <AuthLayout>{children}</AuthLayout>
+        ) : (
+          <AppLayout>{children}</AppLayout>
+        )}
+      </GlobalModelProvider>
     </MantineProvider>
   );
 }

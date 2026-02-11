@@ -1,0 +1,1 @@
+export { useUserModel } from './user-model'

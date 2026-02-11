@@ -1,9 +1,10 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { inject, injectable } from "../../lib/di";
-import { createProvider } from "../providers/create-provider";
-import { InjectionKeys } from "../../config/di/injection-keys";
-import type { DummyJsonApi } from "../../lib/services/DummyJsonApi";
-import type { Comment, Post } from "../../lib/types/dummyjson";
+import { inject, injectable } from "~/lib/di";
+import { createProvider } from "~/application/providers/create-provider";
+import { SnapshotKeys } from "~/application/ssr/snapshot";
+import { InjectionKeys } from "~/config/di/injection-keys";
+import type { DummyJsonApi } from "~/lib/services/DummyJsonApi";
+import type { Comment, Post } from "~/lib/types/dummyjson";
 
 @injectable()
 export class PostsModel {
@@ -145,6 +146,6 @@ export const {
   serialize: serializePostsModel,
 } = createProvider({
   token: InjectionKeys.PostsModel,
-  snapshotKey: "posts",
+  snapshotKey: SnapshotKeys.PostsViewModel,
   snapshotProperties: ["posts", "isLoaded", "lastLoadedAt"] as const,
 });

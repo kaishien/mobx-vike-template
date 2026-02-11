@@ -1,8 +1,8 @@
 import { enhance, type UniversalHandler } from "@universal-middleware/core";
-import { createRequestContainer } from "../config/di/create-request-container";
-import { resolveToken } from "../lib/di";
-import { InjectionKeys } from "../config/di/injection-keys";
-import { createAccessTokenCookieHeader, resolveRedirectToFromUrl } from "../app/auth/session";
+import { createRequestContainer } from "~/config/di/create-request-container";
+import { resolveToken } from "~/lib/di";
+import { InjectionKeys } from "~/config/di/injection-keys";
+import { createAccessTokenCookieHeader, resolveRedirectToFromUrl } from "~/lib/auth/session";
 
 function buildRedirectResponse(location: string, setCookie: string) {
   return new Response(null, {
